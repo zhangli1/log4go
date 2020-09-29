@@ -47,11 +47,11 @@ package log4go
 
 import (
 	"errors"
-	"os"
 	"fmt"
-	"time"
-	"strings"
+	"os"
 	"runtime"
+	"strings"
+	"time"
 )
 
 // Version information
@@ -105,6 +105,7 @@ type LogRecord struct {
 	Created time.Time // The time at which the log message was created (nanoseconds)
 	Source  string    // The message source
 	Message string    // The log message
+	TrackId string
 }
 
 /****** LogWriter ******/
@@ -196,7 +197,7 @@ func (log Logger) intLogf(lvl level, format string, args ...interface{}) {
 	}
 
 	// Determine caller func
-	pc, _, lineno, ok := runtime.Caller(2)
+	pc, _, lineno, ok := runtime.Caller(3)
 	src := ""
 	if ok {
 		src = fmt.Sprintf("%s:%d", runtime.FuncForPC(pc).Name(), lineno)
@@ -240,7 +241,7 @@ func (log Logger) intLogc(lvl level, closure func() string) {
 	}
 
 	// Determine caller func
-	pc, _, lineno, ok := runtime.Caller(2)
+	pc, _, lineno, ok := runtime.Caller(3)
 	src := ""
 	if ok {
 		src = fmt.Sprintf("%s:%d", runtime.FuncForPC(pc).Name(), lineno)
